@@ -1,4 +1,3 @@
-torch==2.2.0+cu121
 wandb
 huggingface_hub
 transformers
