@@ -22,8 +22,16 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY . .
 
-RUN uv pip install --system -r requirements.txt \
+# Install torch first from CUDA wheel
+RUN pip install torch==2.2.0+cu121 torchvision torchaudio \
     --extra-index-url https://download.pytorch.org/whl/cu121
+
+# Install other deps with uv
+# RUN uv pip install --system -r requirements.txt
+RUN uv pip install --system -r requirements.txt \
+    --constraint constraints.txt
+
+
 
 # Automatically log in to HF and wandb (token must be passed at runtime)
 # Using shell wrapper to run commands before Python entry
