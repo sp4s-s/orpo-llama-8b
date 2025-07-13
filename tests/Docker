@@ -1,0 +1,26 @@
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Python + pip
+RUN apt-get update && \
+    apt-get install -y python3.10 python3-pip git && \
+    ln -s /usr/bin/python3.10 /usr/bin/python && \
+    pip install --upgrade pip
+
+# Copy files
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+
+# Auto-login setup
+ENV WANDB_API_KEY=$WANDB_API_KEY
+ENV HF_TOKEN=$HF_TOKEN
+
+# Hugging Face & WandB login
+RUN huggingface-cli login --token $HF_TOKEN && \
+    wandb login $WANDB_API_KEY
+
+ENTRYPOINT ["/app/run.sh"]

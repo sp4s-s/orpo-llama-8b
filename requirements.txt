@@ -1,0 +1,11 @@
+torch==2.2.0+cu121
+wandb
+huggingface_hub
+transformers
+accelerate
+datasets
+pft
+trl
+bitsandbytes
+hf-transfer
+hydra-core
